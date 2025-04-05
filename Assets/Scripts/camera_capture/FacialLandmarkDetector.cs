@@ -50,6 +50,7 @@ public class FacialLandmarkDetector : MonoBehaviour
                     UnityEngine.Debug.Log($"Landmark {lm.name} at ({lm.x}, {lm.y})");
                 }
             }
+            
             catch (System.Exception ex)
             {
                 UnityEngine.Debug.LogError("JSON parsing failed: " + ex.Message);
