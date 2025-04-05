@@ -121,12 +121,22 @@ public class camera_capture : MonoBehaviour
         croppedImage.SetPixels(croppedPixels);
         croppedImage.Apply();
 
-        // Save
+        // save the image
         byte[] bytes = croppedImage.EncodeToPNG();
-        string path = Application.persistentDataPath + "/croppedPhoto.png";
-        System.IO.File.WriteAllBytes(path, bytes);
+        string filePath = System.IO.Path.Combine(Application.persistentDataPath, "face.png");
+        System.IO.File.WriteAllBytes(filePath, bytes);
+        Debug.Log("Image saved to: " + filePath);
 
-        Debug.Log("Cropped photo saved to: " + path);
+        // Get the facial landmarks from the cropped image
+        facial_landmark_detector landmarkDetector = GetComponent<facial_landmark_detector>();
+        if (landmarkDetector != null)
+        {
+            landmarkDetector.GetFacialLandmarks();
+        }
+        else
+        {
+            Debug.LogWarning("FacialLandmarkDetector component not found.");
+        }
     }
 
 
