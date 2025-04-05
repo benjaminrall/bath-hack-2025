@@ -30,6 +30,8 @@ public class WiimoteState
 
     private bool[] _buttonStates = new bool[11];
 
+    public bool wmp_attached => _wiimote.wmp_attached;
+
 
     public WiimoteState(Wiimote wiimote)
     {
