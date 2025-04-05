@@ -1,6 +1,13 @@
 fileFormatVersion: 2
-guid: ba116d1aec6cf9d4286cc8bfef1de00b
+<<<<<<<< HEAD:Assets/Wiimote/Scripts.meta
+guid: 22d2cd979f3130e47b9785d03cec8239
 folderAsset: yes
+timeCreated: 1428024625
+licenseType: Free
+========
+guid: 05f919d1d7d214afbacaacda86fc2040
+folderAsset: yes
+>>>>>>>> tanmay:Assets/scripts.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

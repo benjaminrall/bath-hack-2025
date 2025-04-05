@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/CharacterSelection.unity.meta
 guid: f3ae3c0e0f46b9643b0e1fb8ef52a2c2
+========
+guid: 21779ef4f1ef24e818fc09a2b8a3e9c0
+>>>>>>>> tanmay:Assets/Scenes/testmodel.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

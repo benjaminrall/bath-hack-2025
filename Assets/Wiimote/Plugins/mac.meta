@@ -1,9 +1,15 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Wiimote/Plugins/mac.meta
 guid: 15f0825d2ef934df2922bed07a85c87d
 folderAsset: yes
 timeCreated: 1428351278
 licenseType: Free
+========
+guid: c131977723f284cfba15262836f53939
+folderAsset: yes
+>>>>>>>> tanmay:Assets/Materials.meta
 DefaultImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

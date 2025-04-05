@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Wiimote/Plugins/win32.meta
+guid: 343916bd94f865c4588899b9beb2ed4b
+folderAsset: yes
+timeCreated: 1428204712
+licenseType: Free
+========
+guid: cedf46fe483ed4b1393e4c761f18e98c
+folderAsset: yes
+>>>>>>>> tanmay:Assets/images.meta
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
