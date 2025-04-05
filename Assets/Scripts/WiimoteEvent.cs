@@ -1,0 +1,26 @@
+﻿
+public enum WiimoteEvent
+{
+    A_DOWN,
+    A_UP,
+    B_DOWN,
+    B_UP,
+    D_LEFT_DOWN,
+    D_LEFT_UP,
+    D_RIGHT_DOWN,
+    D_RIGHT_UP,
+    D_UP_DOWN,
+    D_UP_UP,
+    D_DOWN_DOWN,
+    D_DOWN_UP,
+    ONE_DOWN,
+    ONE_UP,
+    TWO_DOWN,
+    TWO_UP,
+    PLUS_DOWN,
+    PLUS_UP,
+    MINUS_DOWN,
+    MINUS_UP,
+    HOME_DOWN,
+    HOME_UP,
+}
