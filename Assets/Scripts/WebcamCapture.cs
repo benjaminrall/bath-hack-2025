@@ -1,36 +1,19 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class camera_capture : MonoBehaviour
+public class WebcamCapture : MonoBehaviour
 {
-    public GameObject cameraPanel;
     public RawImage cameraPreview;
     public AspectRatioFitter aspectFitter;
     public RectTransform overlayFrame;
-    public Button captureButton;
-    public Button openCameraButton;
-    public Button closeCameraButton;
 
     private WebCamTexture _webcamTexture;
     private Texture2D _capturedImage;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+
+    public void StartWebcamPreview()
     {
-        cameraPanel.SetActive(false); // hide camera UI at start
-
-        openCameraButton.onClick.AddListener(OpenCamera);
-        captureButton.onClick.AddListener(CapturePhoto);
-        closeCameraButton.onClick.AddListener(CloseCamera);
-        
-    }
-
-    // open camera and start preview with default camera
-    void OpenCamera()
-    {
-        cameraPanel.SetActive(true);
-
         if (_webcamTexture != null)
         {
             Destroy(_webcamTexture);
@@ -41,48 +24,41 @@ public class camera_capture : MonoBehaviour
         {
             _webcamTexture = new WebCamTexture(devices[0].name);
             cameraPreview.texture = _webcamTexture;
-            cameraPreview.material.mainTexture = _webcamTexture;
             _webcamTexture.Play();
         }
     }
 
-    void CloseCamera()
+    public void StopWebcamPreview()
     {
-        cameraPanel.SetActive(false);
-
-        if (_webcamTexture != null)
-        {
-            if (_webcamTexture.isPlaying)
-                _webcamTexture.Stop();
-
-            cameraPreview.texture = null;
-            cameraPreview.material.mainTexture = null;
-
-            Destroy(_webcamTexture); 
-            _webcamTexture = null;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {   
-        // Update the aspect ratio of the camera preview
-        if (_webcamTexture != null && _webcamTexture.isPlaying)
-        {
-            float ratio = (float) _webcamTexture.width / _webcamTexture.height;
-            aspectFitter.aspectRatio = ratio;
-        }
+        if (_webcamTexture == null) return;
         
+        if (_webcamTexture.isPlaying)
+            _webcamTexture.Stop();
+
+        cameraPreview.texture = null;
+
+        Destroy(_webcamTexture); 
+        _webcamTexture = null;
+    }
+    
+    // Update is called once per frame
+    private void Update()
+    {
+        // Update the aspect ratio of the camera preview
+        if (_webcamTexture == null || !_webcamTexture.isPlaying) return;
+        
+        float ratio = (float) _webcamTexture.width / _webcamTexture.height;
+        aspectFitter.aspectRatio = ratio;
+
     }
 
-    // Capture a photo from the webcam
-    void CapturePhoto()
+    public void Capture()
     {
         if (_webcamTexture == null || !_webcamTexture.isPlaying)
             return;
 
         // Capture the full camera image
-        Texture2D fullImage = new Texture2D(_webcamTexture.width, _webcamTexture.height);
+        Texture2D fullImage = new(_webcamTexture.width, _webcamTexture.height);
         fullImage.SetPixels(_webcamTexture.GetPixels());
         fullImage.Apply();
 
@@ -106,18 +82,20 @@ public class camera_capture : MonoBehaviour
         // Flip Y axis for texture space
         float textureX = (overlayX / previewWidth) * _webcamTexture.width;
         float textureY = (overlayY / previewHeight) * _webcamTexture.height;
-        float textureW = (overlayWidth / previewWidth) * _webcamTexture.width;
+        float textureW = -1 * (overlayWidth / previewWidth) * _webcamTexture.width;
         float textureH = (overlayHeight / previewHeight) * _webcamTexture.height;
+        Debug.Log(textureX + ", " + textureY + ", " + textureW + ", " + textureH);
 
         // Convert to ints and clamp
-        int texX = Mathf.Clamp((int)textureX, 0, _webcamTexture.width - 1);
+        int texX = Mathf.Clamp((int)(textureX - textureW), 0, _webcamTexture.width - 1);
         int texY = Mathf.Clamp((int)textureY, 0, _webcamTexture.height - 1);
         int texW = Mathf.Clamp((int)textureW, 0, _webcamTexture.width - texX);
         int texH = Mathf.Clamp((int)textureH, 0, _webcamTexture.height - texY);
-
+        Debug.Log(texX + ", " + texY + ", " + texW + ", " + texH);
+        
         // Crop
         Color[] croppedPixels = fullImage.GetPixels(texX, texY, texW, texH);
-        Texture2D croppedImage = new Texture2D(texW, texH);
+        Texture2D croppedImage = new(texW, texH);
         croppedImage.SetPixels(croppedPixels);
         croppedImage.Apply();
 
@@ -128,25 +106,6 @@ public class camera_capture : MonoBehaviour
         Debug.Log("Image saved to: " + filePath);
 
         // Get the facial landmarks from the cropped image
-        FacialLandmarkDetector landmarkDetector = GetComponent<FacialLandmarkDetector>();
-        if (landmarkDetector != null)
-        {
-            FacialLandmarkDetector.GetFacialLandmarks();
-        }
-        else
-        {
-            Debug.LogWarning("FacialLandmarkDetector component not found.");
-        }
-    }
-
-
-
-    // Clean up the webcam texture when the script is destroyed
-    void OnDestroy()
-    {
-        if (_webcamTexture != null)
-        {
-            _webcamTexture.Stop();
-        }
+        FacialLandmarkDetector.GetFacialLandmarks();
     }
 }

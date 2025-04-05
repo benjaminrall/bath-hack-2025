@@ -97,8 +97,7 @@ public class WiimoteManager
                 remote = new Wiimote(handle, enumerate.path, trueType);
                 //Debug.Log(enumerate.path + ", " + trueType);
                 //Debug.Log(remote);
-                if (Debug_Messages)
-                    Debug.Log("Found New Remote: " + remote.hidapi_path);
+                Debug.Log("Found New Remote: " + remote.hidapi_path);
 
                 Wiimotes.Add(remote);
                 

@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 
-public class facial_landmark_detector : MonoBehaviour
+public class FacialLandmarkDetector : MonoBehaviour
 {
-    public void GetFacialLandmarks()
+    public static void GetFacialLandmarks()
     {   
         // build paths
         string imagePath = Path.Combine(Application.persistentDataPath, "face.png");
