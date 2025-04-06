@@ -4,6 +4,7 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WiimoteApi;
 
@@ -358,5 +359,12 @@ public class CharacterCreationMenu : MonoBehaviour
         StartCoroutine(AudioGenerator.Run(audioRes[0], audioRes[1]));
         
         PlayerDataManager.Instance.RefreshNewPlayers();
+
+        SceneManager.LoadScene(0);
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene(0);
     }
 }

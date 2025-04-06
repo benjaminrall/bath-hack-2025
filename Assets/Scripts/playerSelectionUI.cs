@@ -40,9 +40,11 @@ public class PlayerSelectionUI : MonoBehaviour
                 iconImage.sprite = player.faceIcon;
             }
 
-            Button button = newButton.GetComponent<Button>();
+            Button button = newButton.GetComponentInChildren<Button>();
+
             if (button != null)
             {
+                button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() =>
                 {
                     Debug.Log($"Selected player {player.playerName}");
@@ -62,5 +64,10 @@ public class PlayerSelectionUI : MonoBehaviour
 
             _spawnedButtons.Add(newButton);
         }
+    }
+
+    void Test()
+    {
+        Debug.Log("Clicked");
     }
 }

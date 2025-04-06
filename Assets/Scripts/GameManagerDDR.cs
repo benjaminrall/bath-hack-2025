@@ -76,6 +76,9 @@ public class GameManagerDDR : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        player1ID = PlayerPrefs.GetInt("Player1Index");
+        player2ID = PlayerPrefs.GetInt("Player2Index");
+        
         gameWindow.SetActive(true);
         gameOverWindow.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
