@@ -1353,7 +1353,7 @@ MonoBehaviour:
   p2ScoreText: {fileID: 2100192560}
   gameWindow: {fileID: 1023146978}
   gameOverWindow: {fileID: 1329829386}
-  trashTalkDelay: 10
+  trashTalkDelay: 7
   winnerText: {fileID: 325986212}
 --- !u!4 &872502561
 Transform:
