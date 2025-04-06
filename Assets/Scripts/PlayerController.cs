@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
     private Renderer _renderer;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
     }

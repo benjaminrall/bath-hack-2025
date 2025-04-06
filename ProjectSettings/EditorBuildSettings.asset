@@ -6,11 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/startMenu.unity
+    guid: 25035f1a48084456fbd0f2ba27287353
+  - enabled: 1
+    path: Assets/Scenes/main menu.unity
+    guid: f48cdc79a125042e9bd9fd3d2e9dbad2
   - enabled: 1
     path: Assets/Scenes/Character Selection.unity
     guid: 82f5aa0a8f7474d959151b0d134db6b3
+  - enabled: 1
+    path: Assets/Scenes/Doppel Dance.unity
+    guid: e5b1aab8d144d9344bc6355cac307156
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

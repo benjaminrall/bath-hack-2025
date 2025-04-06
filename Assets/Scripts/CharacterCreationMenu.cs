@@ -78,10 +78,15 @@ public class CharacterCreationMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!WiimoteInitialiser.Instance.Initialised)
+        {
+            return;
+        }
+
         if (!_wiimoteInitialised)
         {
-            _wiimoteInitialised = TryInitialiseWiimote();
-            return;
+            _wiimoteInitialised = true;
+            _wiimote = WiimoteInitialiser.Instance.Wiimote1;
         }
         
         _wiimote.UpdateWiimoteData();
@@ -139,15 +144,6 @@ public class CharacterCreationMenu : MonoBehaviour
         }
     }
     
-    private bool TryInitialiseWiimote()
-    {
-        if (WiimoteManager.Wiimotes.Count < 1) return false;
-        
-        _wiimote = new WiimoteState(WiimoteManager.Wiimotes[0]);
-        Debug.Log("Initialised Wiimote");
-
-        return true;
-    }
 
     public void OpenKeyboard()
     {

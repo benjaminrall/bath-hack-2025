@@ -33,7 +33,7 @@ public class PlayerDataManager : MonoBehaviour
 
                 if (_instance == null)
                 {
-                    GameObject singletonObject = new GameObject("PlayerController");
+                    GameObject singletonObject = new GameObject("PlayerDataManager");
                     _instance = singletonObject.AddComponent<PlayerDataManager>();
                 }
             }
@@ -197,6 +197,7 @@ public class PlayerDataManager : MonoBehaviour
     //
     public void LoadAllPlayers()
     {
+        PlayerDatas = new List<PlayerData>();
         _playerCount = Directory.GetDirectories(PlayerDataStore).Length;
         for (int i = 0; i < _playerCount; i++)
         {
