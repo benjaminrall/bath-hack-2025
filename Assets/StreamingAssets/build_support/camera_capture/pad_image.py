@@ -3,6 +3,25 @@ import cv2
 import numpy as np
 import os
 
+def paste_with_alpha(canvas, image, top, left):
+    # Extract RGBA channels from the image
+    image_rgb = image[..., :3]  # RGB channels (first three channels)
+    image_alpha = image[..., 3] / 255.0  # Alpha channel (normalized to [0, 1])
+
+    # Compute the region of the canvas where the image will be pasted
+    canvas_patch = canvas[top:top+image.shape[0], left:left+image.shape[1]]
+
+    # Blend the image with the canvas using the alpha channel
+    for y in range(image.shape[0]):
+        for x in range(image.shape[1]):
+            alpha = image_alpha[y, x]
+            if alpha > 0:  # Only blend if the pixel is not fully transparent
+                canvas_patch[y, x] = (1 - alpha) * canvas_patch[y, x] + alpha * image_rgb[y, x]
+
+    # Paste the blended image back onto the canvas
+    canvas[top:top+image.shape[0], left:left+image.shape[1]] = canvas_patch
+    return canvas
+
 def pad_image_to_dimensions(image_path, output_path=None):
     image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
     if image is None:
@@ -40,8 +59,7 @@ def pad_image_to_dimensions(image_path, output_path=None):
     top, left = 30, 180  # Same offsets from original padding
 
     # Paste the image onto the canvas
-    canvas[top:top+150, left:left+150] = image
-
+    canvas = paste_with_alpha(canvas, cv2.imread(image_path, cv2.IMREAD_UNCHANGED), top, left)
     if output_path is None:
         output_path = os.path.join(os.path.dirname(image_path), "material.png")
 

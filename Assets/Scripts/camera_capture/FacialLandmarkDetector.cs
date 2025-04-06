@@ -7,7 +7,7 @@ public class FacialLandmarkDetector : MonoBehaviour
     public static void GetFacialLandmarks()
     {
         string facePath = Path.Combine(Application.persistentDataPath, "face.png");
-        string facePath2 = Path.Combine(Application.persistentDataPath, "face_150x150.png");
+        string facePath2 = Path.Combine(Application.persistentDataPath, "icon.png");
         string supportPath = Path.Combine(Application.streamingAssetsPath, "build_support/camera_capture");
         string detect_facial_landmarks_path = Path.Combine(supportPath, "detect_facial_landmarks.py");
         string pad_image_path = Path.Combine(supportPath, "pad_image.py");

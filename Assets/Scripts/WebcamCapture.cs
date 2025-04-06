@@ -11,15 +11,13 @@ public class WebcamCapture : MonoBehaviour
     private WebCamTexture _webcamTexture;
     private Texture2D _capturedImage;
 
+    public bool CapturedImage { get; private set; }
 
     public void StartWebcamPreview()
     {
-        if (_webcamTexture != null)
-        {
-            Destroy(_webcamTexture);
-        }
 
         WebCamDevice[] devices = WebCamTexture.devices;
+        Debug.Log(devices.Length);
         if (devices.Length > 0)
         {
             _webcamTexture = new WebCamTexture(devices[0].name);
@@ -37,7 +35,6 @@ public class WebcamCapture : MonoBehaviour
 
         cameraPreview.texture = null;
 
-        Destroy(_webcamTexture); 
         _webcamTexture = null;
     }
     
@@ -107,5 +104,7 @@ public class WebcamCapture : MonoBehaviour
 
         // Get the facial landmarks from the cropped image
         FacialLandmarkDetector.GetFacialLandmarks();
+
+        CapturedImage = true;
     }
 }

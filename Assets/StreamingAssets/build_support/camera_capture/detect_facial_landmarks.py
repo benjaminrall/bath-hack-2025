@@ -80,7 +80,7 @@ def process_image(image_path):
             return
 
         face = results.multi_face_landmarks[0]
-        out_path = os.path.join(os.path.dirname(image_path), "face_150x150.png")
+        out_path = os.path.join(os.path.dirname(image_path), "icon.png")
         mask_and_crop_head(image, seg_result.segmentation_mask, face, out_path)
 
 if __name__ == "__main__":

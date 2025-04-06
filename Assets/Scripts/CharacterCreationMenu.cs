@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,6 +19,7 @@ public class CharacterCreationMenu : MonoBehaviour
 
     public WebcamCapture webcamCapture;
     public Material miiShirt;
+    public Material miiFace;
 
     public MicCapture micCapture;
     public GameObject micIcon;
@@ -29,7 +31,8 @@ public class CharacterCreationMenu : MonoBehaviour
     
     public TextMeshProUGUI displayName;
     public TextMeshProUGUI entryName;
-
+    public TextMeshProUGUI errorText;
+    
     public RectTransform wiimotePointer;
     public Sprite wiimotePointSprite;
     public Sprite wiimoteGrabSprite;
@@ -106,7 +109,13 @@ public class CharacterCreationMenu : MonoBehaviour
                     _wiimoteImage.sprite = wiimoteGrabSprite;
                     break;
                 case WiimoteEvent.A_UP:
-                    if (_capturingImage) SubmitImageCapture(true);
+                    bool unlockOverlays = false;
+                    if (_capturingImage)
+                    {
+                        SubmitImageCapture(true);
+                        unlockOverlays = true;
+                        _lockedOverlays = true;
+                    }
 
                     foreach (RaycastResult result in raycastResults) {
                         
@@ -121,6 +130,7 @@ public class CharacterCreationMenu : MonoBehaviour
                         break;
                     }
                     _wiimoteImage.sprite = wiimotePointSprite;
+                    if (unlockOverlays) _lockedOverlays = false;
                     break;
                 case WiimoteEvent.B_UP:
                     if (_capturingImage) SubmitImageCapture(false);
@@ -142,6 +152,7 @@ public class CharacterCreationMenu : MonoBehaviour
     public void OpenKeyboard()
     {
         if (_lockedOverlays) return;
+        
         _lockedOverlays = true;
         keyboardOverlay.SetActive(true);
 
@@ -183,14 +194,19 @@ public class CharacterCreationMenu : MonoBehaviour
     public void OpenImageCapture()
     {
         if (_lockedOverlays) return;
+        
         _lockedOverlays = true;
         _capturingImage = true;
         imageOverlay.SetActive(true);
+        
+        Debug.Log("Starting Webcam Preview");
         webcamCapture.StartWebcamPreview();
     }
 
     public void SubmitImageCapture(bool captureImage)
     {
+        Debug.Log("Capturing Image");
+        
         _lockedOverlays = false;
         _capturingImage = false;
         imageOverlay.SetActive(false);
@@ -198,6 +214,11 @@ public class CharacterCreationMenu : MonoBehaviour
         if (!captureImage) return;
 
         webcamCapture.Capture();
+        webcamCapture.StopWebcamPreview();
+        
+        string facePath = Path.Combine(Application.persistentDataPath, "material.png");
+        Texture2D texture = LoadTextureFromFile(facePath);
+        miiFace.mainTexture = texture;
     }
 
     public void OpenRecording()
@@ -289,6 +310,21 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         _lockedOverlays = false;
         recordOverlay.SetActive(false);
+        
+    }
+    
+    Texture2D LoadTextureFromFile(string path)
+    {
+        if (File.Exists(path))
+        {
+            byte[] fileData = File.ReadAllBytes(path);
+            Texture2D texture = new(2, 2); // Create a texture of any size; Unity will resize it
+            texture.LoadImage(fileData);  // Load the image data into the texture
+            return texture;
+        }
+
+        Debug.LogError("File not found at: " + path);
+        return null;
     }
 
     public void ChangeColour(GameObject colourObject)
@@ -299,7 +335,31 @@ public class CharacterCreationMenu : MonoBehaviour
 
     public void SavePlayerData()
     {
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            errorText.text = "You must enter your name!";
+            return;
+        }
+
+        if (!micCapture.RecordedAudio)
+        {
+            errorText.text = "You must record a voice clip!";
+            return;
+        }
+
+        if (!webcamCapture.CapturedImage)
+        {  
+            errorText.text = "You must capture a picture!";
+            return;
+        }
+
         micCapture.SaveAudio();
+
+
+        string faceIconPath = Path.Combine(Application.persistentDataPath, "icon.png");
+        string faceMapPath = Path.Combine(Application.persistentDataPath, "material.png");
+        string audioFolder = PlayerController.Instance.AddPlayer(_name, miiShirt.color, faceMapPath, faceIconPath);
         
+        StartCoroutine(AudioGenerator.Run(audioFolder));
     }
 }
