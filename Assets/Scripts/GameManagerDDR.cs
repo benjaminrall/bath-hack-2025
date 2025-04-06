@@ -59,12 +59,17 @@ public class GameManagerDDR : MonoBehaviour
 
     public float trashTalkDelay = 9;
     private float _trashTalkTimer;
+    public float danceChangeDelay = 14;
+    private float _danceChangeTimer;
 
     private bool _gameOver;
 
     private AudioSource _audioSource;
 
     private Queue<string> trashTalkQueue;
+
+    private Animator _animator1;
+    private Animator _animator2;
 
     public TextMeshProUGUI winnerText;
     
@@ -79,6 +84,9 @@ public class GameManagerDDR : MonoBehaviour
         _ups = new Queue<ArrowScript>();
         _downs = new Queue<ArrowScript>();
         trashTalkQueue = new Queue<string>();
+
+        _animator1 = player1.GetComponent<Animator>();
+        _animator2 = player2.GetComponent<Animator>();
         
         List<string> insults = new();
         for (int i = 1; i <= 30; i++)
@@ -104,11 +112,21 @@ public class GameManagerDDR : MonoBehaviour
 
         _noteDelayCounter = 2f;
         _trashTalkTimer = trashTalkDelay;
-
+        _danceChangeTimer = danceChangeDelay;
+        SetDances();
         _speed = startSpeed;
         _noteDelay = startNoteDelay;
 
         _scores = new[] { 0, 0 };
+    }
+
+    void SetDances()
+    {
+        Debug.Log("Shuffling");
+        int n1 = Random.Range(1, 7);
+        int n2 = Random.Range(1, 7);
+        _animator1.SetTrigger(n1.ToString());
+        _animator2.SetTrigger(n2.ToString());
     }
 
     void Shuffle(List<string> list)
@@ -232,6 +250,13 @@ public class GameManagerDDR : MonoBehaviour
                 : _player2Data.AudioClips[trashTalk];
             _audioSource.Play();
             _trashTalkTimer = trashTalkDelay;
+        }
+
+        _danceChangeTimer -= Time.deltaTime;
+        if (_danceChangeTimer < 0)
+        {
+            SetDances();
+            _danceChangeTimer = danceChangeDelay;
         }
 
         if (_elapsed > duration)
