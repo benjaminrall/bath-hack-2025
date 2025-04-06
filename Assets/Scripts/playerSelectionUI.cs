@@ -45,6 +45,7 @@ public class PlayerSelectionUI : MonoBehaviour
             {
                 button.onClick.AddListener(() =>
                 {
+                    Debug.Log($"Selected player {player.playerName}");
                     nameBox.text = player.playerName;
                     if (isPlayer1)
                     {
