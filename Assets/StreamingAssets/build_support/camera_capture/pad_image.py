@@ -9,7 +9,13 @@ def pad_image_to_dimensions(image_path, output_path=None):
         print("Could not read image.")
         return
 
-    # Handle alpha channel if present
+    # Check image size
+    height, width = image.shape[:2]
+    if height != 150 or width != 150:
+        print(f"Image must be 150x150. Got {width}x{height}")
+        return
+
+    # Determine average color (non-transparent pixels only if alpha channel exists)
     if image.shape[2] == 4:
         b, g, r, a = cv2.split(image)
         mask = a > 0
@@ -19,40 +25,27 @@ def pad_image_to_dimensions(image_path, output_path=None):
         avg_b = int(np.mean(b[mask]))
         avg_g = int(np.mean(g[mask]))
         avg_r = int(np.mean(r[mask]))
-        avg_color = (avg_b, avg_g, avg_r, 255)
-        # Replace transparent areas with average color
-        b[~mask] = avg_b
-        g[~mask] = avg_g
-        r[~mask] = avg_r
-        a[~mask] = 255
-        image = cv2.merge([b, g, r, a])
+        avg_color = (avg_b, avg_g, avg_r)
+        # Convert image to BGR (drop alpha)
+        image = cv2.merge([b, g, r])
     else:
-        # No alpha channel
         avg_color_per_channel = image.mean(axis=0).mean(axis=0)
         avg_color = tuple([int(c) for c in avg_color_per_channel])
 
-    # Check original dimensions
-    height, width = image.shape[:2]
-    if height != 150 or width != 150:
-        print(f"Image must be 150x150. Got {width}x{height}")
-        return
+    # Create blank canvas with average color
+    canvas_height, canvas_width = 192, 510
+    canvas = np.full((canvas_height, canvas_width, 3), avg_color, dtype=np.uint8)
 
-    # Padding values
-    top, bottom, left, right = 30, 12, 180, 180
+    # Compute placement coordinates
+    top, left = 30, 180  # Same offsets from original padding
 
-    # Pad with avg_color
-    padded_image = cv2.copyMakeBorder(
-        image,
-        top=top, bottom=bottom,
-        left=left, right=right,
-        borderType=cv2.BORDER_CONSTANT,
-        value=avg_color
-    )
+    # Paste the image onto the canvas
+    canvas[top:top+150, left:left+150] = image
 
     if output_path is None:
         output_path = os.path.join(os.path.dirname(image_path), "padded_510x192_filled.png")
 
-    cv2.imwrite(output_path, padded_image)
+    cv2.imwrite(output_path, canvas)
     print(f"Padded image saved to: {output_path}")
 
 if __name__ == "__main__":
