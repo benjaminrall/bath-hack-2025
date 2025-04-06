@@ -82,5 +82,5 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
         logging.info('GPU acceleration not available, using CPU')
-
+    print(device)
     run_tts(args)

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,11 +12,21 @@ public class CharacterCreationMenu : MonoBehaviour
     public GameObject imageOverlay;
     public GameObject recordOverlay;
     private bool _capturingImage;
+    private bool _capturingMic;
+    private bool _playingMic;
     private bool _lockedOverlays;
 
     public WebcamCapture webcamCapture;
     public Material miiShirt;
 
+    public MicCapture micCapture;
+    public GameObject micIcon;
+    public GameObject stopMicIcon;
+    public GameObject playIcon;
+    public GameObject stopPlayIcon;
+    private Coroutine _stopRecordingCoroutine;
+    private Coroutine _stopPlaybackCoroutine;
+    
     public TextMeshProUGUI displayName;
     public TextMeshProUGUI entryName;
 
@@ -32,6 +43,8 @@ public class CharacterCreationMenu : MonoBehaviour
     private bool _wiimoteInitialised;
     private WiimoteState _wiimote;
     
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,6 +53,11 @@ public class CharacterCreationMenu : MonoBehaviour
         keyboardOverlay.SetActive(false);
         imageOverlay.SetActive(false);
         recordOverlay.SetActive(false);
+        
+        micIcon.SetActive(true);
+        stopMicIcon.SetActive(false);
+        playIcon.SetActive(true);
+        stopPlayIcon.SetActive(false);
 
         _name = "";
         displayName.text = _name;
@@ -113,7 +131,7 @@ public class CharacterCreationMenu : MonoBehaviour
     
     private bool TryInitialiseWiimote()
     {
-        if (WiimoteManager.Wiimotes.Count < 2) return false;
+        if (WiimoteManager.Wiimotes.Count < 1) return false;
         
         _wiimote = new WiimoteState(WiimoteManager.Wiimotes[0]);
         Debug.Log("Initialised Wiimote");
@@ -189,6 +207,84 @@ public class CharacterCreationMenu : MonoBehaviour
         recordOverlay.SetActive(true);
     }
 
+    public void ToggleRecording()
+    {
+        if (_playingMic)
+        {
+            TogglePlayback();
+        }
+        
+        if (_capturingMic)
+        {
+            _capturingMic = false;
+            micIcon.SetActive(true);
+            stopMicIcon.SetActive(false);
+            micCapture.StopRecording();
+
+            if (_stopRecordingCoroutine != null)
+            {
+                StopCoroutine(_stopRecordingCoroutine);
+                _stopRecordingCoroutine = null;
+            }
+        }
+        else
+        {
+            _capturingMic = true;
+            micIcon.SetActive(false);
+            stopMicIcon.SetActive(true);
+            micCapture.StartRecording();
+
+            _stopRecordingCoroutine = StartCoroutine(StopRecordingAfterDelay(10.0f));
+        }
+    }
+
+    private IEnumerator StopRecordingAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (_capturingMic) ToggleRecording();
+    }
+
+    public void TogglePlayback()
+    {
+        if (_capturingMic)
+        {
+            ToggleRecording();
+        }
+        
+        if (_playingMic)
+        {
+            _playingMic = false;
+            playIcon.SetActive(true);
+            stopPlayIcon.SetActive(false);
+            micCapture.StopRecordedClip();
+            
+            if (_stopPlaybackCoroutine != null)
+            {
+                StopCoroutine(_stopPlaybackCoroutine);
+                _stopPlaybackCoroutine = null;
+            }
+        }
+        else
+        {
+            bool play = micCapture.PlayRecordedClip();
+         
+            if (!play) return;
+            
+            _playingMic = true;
+            playIcon.SetActive(false);
+            stopPlayIcon.SetActive(true);
+            Debug.Log(micCapture.GetClipLength());
+            _stopPlaybackCoroutine = StartCoroutine(StopPlayingAfterDelay(micCapture.GetClipLength()));
+        }
+    }
+    
+    private IEnumerator StopPlayingAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (_playingMic) TogglePlayback();
+    }
+    
+    
     public void SubmitRecording()
     {
         _lockedOverlays = false;
@@ -199,5 +295,11 @@ public class CharacterCreationMenu : MonoBehaviour
     {
         Color colour = colourObject.GetComponent<Image>().color;
         miiShirt.color = colour;
+    }
+
+    public void SavePlayerData()
+    {
+        micCapture.SaveAudio();
+        
     }
 }

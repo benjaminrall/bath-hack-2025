@@ -1071,6 +1071,11 @@ MonoBehaviour:
   recordOverlay: {fileID: 1824182293}
   webcamCapture: {fileID: 1474072884}
   miiShirt: {fileID: 2100000, guid: 9624cddac240da444b047d925782fa62, type: 2}
+  micCapture: {fileID: 1474072886}
+  micIcon: {fileID: 1642667731}
+  stopMicIcon: {fileID: 572595677}
+  playIcon: {fileID: 641542683}
+  stopPlayIcon: {fileID: 1653117474}
   displayName: {fileID: 1573515843}
   entryName: {fileID: 1858631369}
   wiimotePointer: {fileID: 1141540534}
@@ -1957,6 +1962,7 @@ GameObject:
   - component: {fileID: 457103820}
   - component: {fileID: 457103822}
   - component: {fileID: 457103821}
+  - component: {fileID: 457103823}
   m_Layer: 5
   m_Name: Record
   m_TagString: Untagged
@@ -2024,6 +2030,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 457103819}
   m_CullTransparentMesh: 1
+--- !u!114 &457103823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457103819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1819839579}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 231136738}
+        m_TargetAssemblyTypeName: CharacterCreationMenu, Assembly-CSharp
+        m_MethodName: ToggleRecording
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: A
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &494320345
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,6 +3247,7 @@ GameObject:
   - component: {fileID: 652411958}
   - component: {fileID: 652411960}
   - component: {fileID: 652411959}
+  - component: {fileID: 652411961}
   m_Layer: 5
   m_Name: Playback
   m_TagString: Untagged
@@ -3252,6 +3315,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652411957}
   m_CullTransparentMesh: 1
+--- !u!114 &652411961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652411957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1260232037}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 231136738}
+        m_TargetAssemblyTypeName: CharacterCreationMenu, Assembly-CSharp
+        m_MethodName: TogglePlayback
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: A
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &652980731
 GameObject:
   m_ObjectHideFlags: 0
@@ -4984,70 +5103,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982618676}
   m_CullTransparentMesh: 1
---- !u!1 &990721735
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 990721738}
-  - component: {fileID: 990721737}
-  - component: {fileID: 990721736}
-  m_Layer: 0
-  m_Name: CameraManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &990721736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990721735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae5d59bae58494f80ae0a9c695ed7e4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &990721737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990721735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f0825b5a9d54594951e9a50e0d6ab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraPanel: {fileID: 0}
-  cameraPreview: {fileID: 0}
-  aspectFitter: {fileID: 0}
-  overlayFrame: {fileID: 0}
-  captureButton: {fileID: 0}
-  openCameraButton: {fileID: 0}
-  closeCameraButton: {fileID: 0}
---- !u!4 &990721738
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990721735}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 540.577, y: 285.33597, z: 175.10904}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &991561338
 GameObject:
   m_ObjectHideFlags: 0
@@ -5582,7 +5637,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1102644514}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 231136738}
+        m_TargetAssemblyTypeName: CharacterCreationMenu, Assembly-CSharp
+        m_MethodName: SubmitRecording
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1102644514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7667,8 +7734,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1474072885}
   - component: {fileID: 1474072884}
+  - component: {fileID: 1474072886}
   m_Layer: 0
-  m_Name: WebcamCapture
+  m_Name: Capture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7704,6 +7772,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474072886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474072883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4361cfaf5d04494eb7f10c13acb2826c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1482638728
 GameObject:
   m_ObjectHideFlags: 0
@@ -7968,7 +8048,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Character Creation
+  m_text: Doppel Maker
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c0612171556726b42995cbb980dae0e0, type: 2}
   m_sharedMaterial: {fileID: -1076739968564394614, guid: c0612171556726b42995cbb980dae0e0, type: 2}
@@ -11698,6 +11778,5 @@ SceneRoots:
   - {fileID: 405126522}
   - {fileID: 1876104400}
   - {fileID: 301502554}
-  - {fileID: 990721738}
   - {fileID: 1474072885}
   - {fileID: 1843206087}

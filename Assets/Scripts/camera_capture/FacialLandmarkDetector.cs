@@ -11,7 +11,7 @@ public class FacialLandmarkDetector : MonoBehaviour
         string supportPath = Path.Combine(Application.streamingAssetsPath, "build_support/camera_capture");
         string detect_facial_landmarks_path = Path.Combine(supportPath, "detect_facial_landmarks.py");
         string pad_image_path = Path.Combine(supportPath, "pad_image.py");
-        string pythonPath = Path.Combine(supportPath, "run_python.sh");
+        string pythonPath = Path.Combine(supportPath, "run_python.bat");
 
 
         // get the 150x150 image

@@ -50,7 +50,7 @@ def pad_image_to_dimensions(image_path, output_path=None):
     )
 
     if output_path is None:
-        output_path = os.path.join(os.path.dirname(image_path), "padded_510x192_filled.png")
+        output_path = os.path.join(os.path.dirname(image_path), "material.png")
 
     cv2.imwrite(output_path, padded_image)
     print(f"Padded image saved to: {output_path}")
