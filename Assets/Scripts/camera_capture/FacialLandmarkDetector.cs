@@ -11,7 +11,7 @@ public class FacialLandmarkDetector : MonoBehaviour
         string imagePath = Path.Combine(Application.persistentDataPath, "face.png");
         string supportPath = Path.Combine(Application.streamingAssetsPath, "build_support/camera_capture");
         string scriptPath = Path.Combine(supportPath, "detect_facial_landmarks.py");
-        string pythonPath = Path.Combine(supportPath, "run_python.bat");
+        string pythonPath = Path.Combine(supportPath, "run_python.sh");
 
         ProcessStartInfo start = new ProcessStartInfo
         {

@@ -38,6 +38,23 @@ def get_head_bounding_box(landmarks, width, height,
     return x1, y1, x2, y2
 
 
+def pad_to_square(image):
+    height, width = image.shape[:2]
+    size = max(width, height)
+    pad_vert = (size - height) // 2
+    pad_horiz = (size - width) // 2
+
+    # Pad with transparent pixels
+    padded = cv2.copyMakeBorder(
+        image,
+        pad_vert, size - height - pad_vert,
+        pad_horiz, size - width - pad_horiz,
+        borderType=cv2.BORDER_CONSTANT,
+        value=[0, 0, 0, 0]  # Transparent padding
+    )
+    return padded, pad_horiz, pad_vert, size / width, size / height
+
+
 def mask_and_crop_head(image, segmentation_mask, face_landmarks, output_path):
     h, w, _ = image.shape
 
@@ -54,11 +71,18 @@ def mask_and_crop_head(image, segmentation_mask, face_landmarks, output_path):
     x1, y1, x2, y2 = get_head_bounding_box(face_landmarks.landmark, w, h)
     cropped_image = image_bgra[y1:y2, x1:x2]
 
-    # Save final image
-    cv2.imwrite(output_path, cropped_image)
+    # Pad to square
+    square_image, pad_x, pad_y, scale_x, scale_y = pad_to_square(cropped_image)
 
-    # Return the crop offset
-    return x1, y1
+    # Resize to 150x150
+    resized_image = cv2.resize(square_image, (150, 150), interpolation=cv2.INTER_AREA)
+
+    # Save final image
+    cv2.imwrite(output_path, resized_image)
+
+    # Return original offset and scale info for landmark adjustment
+    return x1, y1, pad_x, pad_y, scale_x, scale_y
+
 
 def detect_landmarks(image_path):
     mp_face_mesh = mp.solutions.face_mesh
@@ -92,16 +116,18 @@ def detect_landmarks(image_path):
 
         # Mask and crop image
         out_path = os.path.join(os.path.dirname(image_path), "face_masked.png")
-        offset_x, offset_y = mask_and_crop_head(image, seg_result.segmentation_mask, face, out_path)
+        offset_x, offset_y, pad_x, pad_y, scale_x, scale_y = mask_and_crop_head(
+            image, seg_result.segmentation_mask, face, out_path
+        )
 
-        # Adjust landmarks to cropped space
+        # Adjust landmarks to cropped, padded and resized space
         output = []
         for name, idx in KEY_INDICES.items():
             if idx >= len(face.landmark):
                 continue
             lm = face.landmark[idx]
-            x = lm.x * width - offset_x
-            y = lm.y * height - offset_y
+            x = (lm.x * width - offset_x + pad_x) * scale_x * (150 / max(scale_x * (width - offset_x), scale_y * (height - offset_y)))
+            y = (lm.y * height - offset_y + pad_y) * scale_y * (150 / max(scale_x * (width - offset_x), scale_y * (height - offset_y)))
             output.append({ "name": name, "x": x, "y": y })
 
         print(json.dumps({ "landmarks": output }))
