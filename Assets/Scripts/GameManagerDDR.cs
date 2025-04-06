@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class GameManagerDDR : MonoBehaviour
@@ -64,6 +65,8 @@ public class GameManagerDDR : MonoBehaviour
     private AudioSource _audioSource;
 
     private Queue<string> trashTalkQueue;
+
+    public TextMeshProUGUI winnerText;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -120,7 +123,21 @@ public class GameManagerDDR : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_gameOver) return;
+        if (_gameOver)
+        {
+            WiimoteState wiimote = WiimoteInitialiser.Instance.Wiimote1;
+            wiimote.UpdateWiimoteData();
+            foreach (WiimoteEvent wiimoteEvent in wiimote.GetEvents())
+            {
+                switch (wiimoteEvent)
+                {
+                    case WiimoteEvent.B_DOWN:
+                        SceneManager.LoadScene(0);
+                        break;
+                }
+            }
+            return;
+        };
         
         _elapsed += Time.deltaTime;
 
@@ -141,7 +158,6 @@ public class GameManagerDDR : MonoBehaviour
         
         foreach (WiimoteEvent wiimoteEvent in wiimote1.GetEvents())
         {
-            Debug.Log(wiimoteEvent);
             switch (wiimoteEvent)
             {
                 case WiimoteEvent.D_UP_DOWN:
@@ -229,6 +245,10 @@ public class GameManagerDDR : MonoBehaviour
         _gameOver = true;
         gameWindow.SetActive(false);
         gameOverWindow.SetActive(true);
+        string winner = _scores[0] > _scores[1]
+            ? _player1Data.playerName
+            : _player2Data.playerName;
+        winnerText.text = winner + " wins!";
     }
 
     public void CreateNote(GameObject prefab, Queue<ArrowScript> queue)
