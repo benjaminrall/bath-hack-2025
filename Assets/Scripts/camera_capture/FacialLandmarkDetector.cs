@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
@@ -6,24 +5,27 @@ using UnityEngine;
 public class FacialLandmarkDetector : MonoBehaviour
 {
     public static void GetFacialLandmarks()
-    {   
-        // build paths
-        string imagePath = Path.Combine(Application.persistentDataPath, "face.png");
+    {
+        string facePath = Path.Combine(Application.persistentDataPath, "face.png");
+        string facePath2 = Path.Combine(Application.persistentDataPath, "face_150x150.png");
         string supportPath = Path.Combine(Application.streamingAssetsPath, "build_support/camera_capture");
-        string scriptPath = Path.Combine(supportPath, "detect_facial_landmarks.py");
-        string pythonPath = Path.Combine(supportPath, "run_python.bat");
+        string detect_facial_landmarks_path = Path.Combine(supportPath, "detect_facial_landmarks.py");
+        string pad_image_path = Path.Combine(supportPath, "pad_image.py");
+        string pythonPath = Path.Combine(supportPath, "run_python.sh");
 
-        ProcessStartInfo start = new ProcessStartInfo
+
+        // get the 150x150 image
+        ProcessStartInfo detectFace = new ProcessStartInfo
         {
             FileName = pythonPath,
-            Arguments = $"\"{scriptPath}\" \"{imagePath}\"",
+            Arguments = $"\"{detect_facial_landmarks_path}\" \"{facePath}\"",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
 
-        using (Process process = Process.Start(start))
+        using (Process process = Process.Start(detectFace))
         {
             string output = process.StandardOutput.ReadToEnd().Trim();
             string error = process.StandardError.ReadToEnd();
@@ -31,44 +33,40 @@ public class FacialLandmarkDetector : MonoBehaviour
 
             if (!string.IsNullOrEmpty(error))
             {
-                UnityEngine.Debug.LogError($"Error: {error}");
+                UnityEngine.Debug.LogError($"Python Error: {error}");
             }
 
-            if (string.IsNullOrWhiteSpace(output))
+            if (!string.IsNullOrEmpty(output))
             {
-                UnityEngine.Debug.LogWarning("No output received from Python.");
-                return;
+                UnityEngine.Debug.Log($"Python Output:\n{output}");
+            }
+        }
+
+        // pad the image to 510x192
+        ProcessStartInfo padImage = new ProcessStartInfo
+        {
+            FileName = pythonPath,
+            Arguments = $"\"{pad_image_path}\" \"{facePath2}\"",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        using (Process process = Process.Start(padImage))
+        {
+            string output = process.StandardOutput.ReadToEnd().Trim();
+            string error = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                UnityEngine.Debug.LogError($"Python Error: {error}");
             }
 
-            try
+            if (!string.IsNullOrEmpty(output))
             {
-                UnityEngine.Debug.Log("Raw Python output:\n" + output);
-
-                LandmarkArrayWrapper landmarkList = JsonUtility.FromJson<LandmarkArrayWrapper>(output);
-                foreach (var lm in landmarkList.landmarks)
-                {
-                    UnityEngine.Debug.Log($"Landmark {lm.name} at ({lm.x}, {lm.y})");
-                }
-            }
-            
-            catch (System.Exception ex)
-            {
-                UnityEngine.Debug.LogError("JSON parsing failed: " + ex.Message);
+                UnityEngine.Debug.Log($"Python Output:\n{output}");
             }
         }
     }
-}
-
-[System.Serializable]
-public class Landmark
-{
-    public string name;
-    public float x;
-    public float y;
-}
-
-[System.Serializable]
-public class LandmarkArrayWrapper
-{
-    public Landmark[] landmarks;
 }
