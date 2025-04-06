@@ -855,7 +855,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fffbcc416d648c45bd9c8b375867a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 0
+  PlayerDatas: []
+  templateMaterial: {fileID: 2100000, guid: cc69873ff1db09f46b6d0378db25561c, type: 2}
 --- !u!1 &196048947
 GameObject:
   m_ObjectHideFlags: 0

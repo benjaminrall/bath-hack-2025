@@ -355,11 +355,12 @@ public class CharacterCreationMenu : MonoBehaviour
 
         micCapture.SaveAudio();
 
-
         string faceIconPath = Path.Combine(Application.persistentDataPath, "icon.png");
         string faceMapPath = Path.Combine(Application.persistentDataPath, "material.png");
         string audioFolder = PlayerController.Instance.AddPlayer(_name, miiShirt.color, faceMapPath, faceIconPath);
         
         StartCoroutine(AudioGenerator.Run(audioFolder));
+        
+        PlayerController.Instance.RefreshNewPlayers();
     }
 }
