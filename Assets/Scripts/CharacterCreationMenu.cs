@@ -357,9 +357,9 @@ public class CharacterCreationMenu : MonoBehaviour
 
         string faceIconPath = Path.Combine(Application.persistentDataPath, "icon.png");
         string faceMapPath = Path.Combine(Application.persistentDataPath, "material.png");
-        string audioFolder = PlayerController.Instance.AddPlayer(_name, miiShirt.color, faceMapPath, faceIconPath);
+        string[] audioRes = PlayerController.Instance.AddPlayer(_name, miiShirt.color, faceMapPath, faceIconPath);
         
-        StartCoroutine(AudioGenerator.Run(audioFolder));
+        StartCoroutine(AudioGenerator.Run(audioRes[0], audioRes[1]));
         
         PlayerController.Instance.RefreshNewPlayers();
     }

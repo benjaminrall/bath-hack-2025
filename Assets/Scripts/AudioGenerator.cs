@@ -11,9 +11,8 @@ public class AudioGenerator : MonoBehaviour
 {
     private const string RefText = "To be or not to be, that is the question.";
     
-    public static async Task GenerateAudioClips(string audioFolder)
+    public static async Task GenerateAudioClips(string sourcePath, string audioFolder)
     {
-        string refPath = Path.Combine(Application.persistentDataPath, "recorded_audio.wav");
         string generationPath = Path.Combine(Application.persistentDataPath, "generation");
         string voicelinesPath = Path.Combine(generationPath, "voicelines.json");
         string modelPath = Path.Combine(generationPath, "model");
@@ -24,7 +23,7 @@ public class AudioGenerator : MonoBehaviour
         ProcessStartInfo generate = new()
         {
             FileName = pythonPath,
-            Arguments = $"\"{generatePythonPath}\" --prompt_text \"{RefText}\" --prompt_speech_path \"{refPath}\" --talkies_file \"{voicelinesPath}\" --model_dir \"{modelPath}\" --save_dir \"{audioFolder}\"",
+            Arguments = $"\"{generatePythonPath}\" --prompt_text \"{RefText}\" --prompt_speech_path \"{sourcePath}\" --talkies_file \"{voicelinesPath}\" --model_dir \"{modelPath}\" --save_dir \"{audioFolder}\"",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
@@ -48,10 +47,10 @@ public class AudioGenerator : MonoBehaviour
         }
     }
 
-    public static IEnumerator Run(string audioFolder)
+    public static IEnumerator Run(string sourcePath, string audioFolder)
     {
         Debug.Log("Starting generation run");
-        yield return GenerateAudioClips(audioFolder).AsIEnumerator();
+        yield return GenerateAudioClips(sourcePath, audioFolder).AsIEnumerator();
     }
 }
 

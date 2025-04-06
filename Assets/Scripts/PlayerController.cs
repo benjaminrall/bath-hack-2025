@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public string AddPlayer(string playerName, Color colour, string faceMapPath, string faceIconPath)
+    public string[] AddPlayer(string playerName, Color colour, string faceMapPath, string faceIconPath)
     {
         int id = _playerCount;
         _playerCount++;
@@ -76,10 +76,11 @@ public class PlayerController : MonoBehaviour
         
         File.WriteAllText(jsonPath, json);
         
-        CopyImageToFolder(faceMapPath, playerFolder, "map.png");
-        CopyImageToFolder(faceIconPath, playerFolder, "icon.png");
-
-        return audioFolder;
+        CopyFileToFolder(faceMapPath, playerFolder, "map.png");
+        CopyFileToFolder(faceIconPath, playerFolder, "icon.png");
+        CopyFileToFolder(Path.Combine(Application.persistentDataPath, "recorded_audio.wav"), playerFolder, "reference.wav");
+        
+        return new [] { Path.Combine(playerFolder, "reference.wav"), audioFolder };
     }
 
     public PlayerData LoadPlayerData(int playerID)
@@ -234,7 +235,7 @@ public class PlayerController : MonoBehaviour
         
     }
     
-    private void CopyImageToFolder(string imagePath, string targetFolder, string targetFileName)
+    private void CopyFileToFolder(string imagePath, string targetFolder, string targetFileName)
     {
         if (File.Exists(imagePath))
         {
