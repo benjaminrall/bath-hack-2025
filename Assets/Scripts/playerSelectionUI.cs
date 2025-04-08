@@ -20,6 +20,7 @@ public class PlayerSelectionUI : MonoBehaviour
 
     void LoadPlayerButtons()
     {
+        PlayerDataManager.Instance.LoadAllPlayers();
         List<PlayerData> players = PlayerDataManager.Instance.PlayerDatas;
         if (players == null || players.Count == 0)
         {

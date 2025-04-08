@@ -138,9 +138,6 @@ public class CharacterCreationMenu : MonoBehaviour
                     _wiimoteImage.sprite = wiimotePointSprite;
                     if (unlockOverlays) _lockedOverlays = false;
                     break;
-                case WiimoteEvent.B_UP:
-                    if (_capturingImage) SubmitImageCapture(false);
-                    break;
             }
         }
     }

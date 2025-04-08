@@ -277,6 +277,7 @@ public class GameManagerDDR : MonoBehaviour
             ? _player1Data.playerName
             : _player2Data.playerName;
         string trashTalk = trashTalkQueue.Dequeue();
+        
         _audioSource.clip = _scores[0] > _scores[1]
             ? _player1Data.AudioClips[trashTalk]
             : _player2Data.AudioClips[trashTalk];
